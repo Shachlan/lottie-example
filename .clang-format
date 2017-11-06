@@ -1,0 +1,12 @@
+BasedOnStyle: Google
+AccessModifierOffset: -2
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+ColumnLimit:     100
+ObjCSpaceAfterProperty: true
+ObjCSpaceBeforeProtocolList: true
+PointerAlignment: Right
+SpacesInContainerLiterals: false
+Standard: Cpp11
+DerivePointerAlignment: false
