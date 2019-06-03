@@ -168,7 +168,7 @@ void setupOpenGL(int width, int height) {
 void loadTexture(uint32_t texture_name, int width, int height, const uint8_t *buffer) {
   glActiveTexture(GL_TEXTURE0 + texture_name);
   glBindTexture(GL_TEXTURE_2D, texture_name);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, buffer);
 }
 
 void blendFrames(uint32_t texture1ID, uint32_t texture2ID, float blend_ratio) {
@@ -193,7 +193,8 @@ void blendFrames(uint32_t texture1ID, uint32_t texture2ID, float blend_ratio) {
 }
 
 void getCurrentResults(int width, int height, uint8_t *outputBuffer) {
-  glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, outputBuffer);
+  glBindVertexArray(0);
+  glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, outputBuffer);
 }
 
 uint32_t render_text(string text) {
@@ -226,9 +227,8 @@ uint32_t render_lottie(double time) {
   double intpart;
 
   auto fractpart = modf(time, &intpart);
-  printf("%f - %f\n", fractpart, time);
 
-  // glBindVertexArray(0);
+  glBindVertexArray(0);
   skiaContext->resetContext();
 
   auto canvas = lottie_surface->getCanvas();
@@ -245,6 +245,8 @@ uint32_t render_lottie(double time) {
     anim->render(canvas);
     canvas->flush();
   }
+
+  auto png_data = lottie_surface->makeImageSnapshot()->encodeToData();
 
   return lottie_texture;
 }
