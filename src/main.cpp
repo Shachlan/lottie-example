@@ -126,9 +126,9 @@ int main(int argc, char *argv[]) {
     loadTexture(primary_texture, width, height, input_data);
     counter += 0.1;
     // auto rendered_text = render_lottie(counter);
-    auto rendered_text = render_text("hello world " + std::to_string(counter));
+    // auto rendered_text = render_text("hello world " + std::to_string(counter));
 
-    blendFrames(primary_texture, rendered_text, 0.2);
+    blendFrames(primary_texture, primary_texture, 0.2);
     getCurrentResults(width, height, output_data);
 
     write_png_file("result" + std::to_string(i) + ".png");
