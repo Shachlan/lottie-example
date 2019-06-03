@@ -63,7 +63,7 @@ static void read_png_file(string filename) {
     row_pointers[y] = (png_byte *)malloc(row_size);
   }
   input_data = (uint8_t *)malloc(width * height * 3);
-  output_data = (uint8_t *)malloc(width * height * 3);
+  output_data = (uint8_t *)malloc(width * height * 4);
   png_read_image(png, row_pointers);
   for (int i = 0; i < height; i++) {
     auto row = row_pointers[i];
@@ -81,12 +81,8 @@ static void read_png_file(string filename) {
 static void write_png_file(string filename) {
   for (int i = 0; i < height; i++) {
     auto row = row_pointers[i];
-    for (int j = 0; j < width; j++) {
-      auto data_offset = (j * 3) + (i * width * 3);
-      auto png_offset = (j * 4);
-      row[png_offset] = output_data[data_offset];
-      row[png_offset + 1] = output_data[data_offset + 1];
-      row[png_offset + 2] = output_data[data_offset + 2];
+    for (int j = 0; j < row_size; j++) {
+      row[j] = output_data[j + (i * row_size)];
     }
   }
   FILE *fp = fopen(filename.c_str(), "wb");
@@ -125,10 +121,10 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < 10; i++) {
     loadTexture(primary_texture, width, height, input_data);
     counter += 0.1;
-    // auto rendered_text = render_lottie(counter);
+    auto rendered_text = render_lottie(counter);
     // auto rendered_text = render_text("hello world " + std::to_string(counter));
 
-    blendFrames(primary_texture, primary_texture, 0.2);
+    blendFrames(primary_texture, rendered_text, 0.2);
     getCurrentResults(width, height, output_data);
 
     write_png_file("result" + std::to_string(i) + ".png");
